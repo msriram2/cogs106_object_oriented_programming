@@ -1,3 +1,9 @@
+import math 
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy
+from scipy.stats import norm
+
 """
 Goal: Create a class that implements the signal-detection-theory formulas. 
 
@@ -18,20 +24,20 @@ class SignalDetection:
         self.falseAlarms = falseAlarms 
         self.correctRejections = correctRejections 
 
-    def hit_rate(self): 
-        hit_val = #program here 
+    def hit_rate(self, hits, misses): 
+        hit_val = hits/(hits + misses)
         return hit_val 
-
-    def fl_rate(self): 
-        fl_val = #program here 
+    
+    def fl_rate(self, falseAlarms, correctRejections): 
+        fl_val = falseAlarms/(falseAlarms + correctRejections)
         return fl_val
 
     def d_prime(self, hit_val, fl_val): 
-        d_val = #Program formula here 
+        d_val = norm.ppf(hit_val) - norm.ppf(fl_val)
         return d_val 
 
     def criterion(self, hit_val, fl_val): 
-        c_val = #Input formula here 
+        c_val = -0.5 * (norm.ppf(hit_val) + norm.ppf(fl_val))
         return c_val
 
 
