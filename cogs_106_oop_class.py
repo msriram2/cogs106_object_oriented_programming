@@ -25,21 +25,29 @@ class SignalDetection:
         self.correctRejections = correctRejections 
 
     def hit_rate(self, hits, misses): 
-        hit_val = hits/(hits + misses)
-        return hit_val 
+        """Calculates the proportion of identified signal trials. Returns string when denominator == 0"""
+        return hits/(hits + misses) if (hits + misses) > 0 else "Error"
     
     def fl_rate(self, falseAlarms, correctRejections): 
-        fl_val = falseAlarms/(falseAlarms + correctRejections)
-        return fl_val
+        """Calculates the proportion of noise trials that were incorrectly detected. Returns string when denominator == 0"""
+        return falseAlarms/(falseAlarms + correctRejections) if (falseAlarms + correctRejections) > 0 else "Error"
 
-    def d_prime(self, hit_val, fl_val): 
-        d_val = norm.ppf(hit_val) - norm.ppf(fl_val)
+    def d_prime(self): 
+        """returns difference between the standard deviations of hit rate and false alarm rate."""
+        d_val = norm.ppf(self.hit_rate) - norm.ppf(self.fl_rate)
         return d_val 
 
-    def criterion(self, hit_val, fl_val): 
-        c_val = -0.5 * (norm.ppf(hit_val) + norm.ppf(fl_val))
+    def criterion(self): 
+        """Returns response bias times the sum of the standard devations of hit rate and false alarm rate"""
+        c_val = -0.5 * (norm.ppf(self.hit_rate) + norm.ppf(self.fl_rate))
         return c_val
+    
+#Example usage 
 
+sd = SignalDetection(15, 5, 15, 5)
+hit_result = sd.hit_rate 
+print(hit_result) 
 
-if __name__ == '__main__': 
-    sig_val = SignalDetection
+sd = SignalDetection(15, 5, 15, 5)
+fl_result = sd.fl_rate
+print(fl_result) 
